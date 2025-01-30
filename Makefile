@@ -1,14 +1,25 @@
 CC = gcc
-CFLAGS = -Wall -g
-TARGET = eshop
+CFLAGS = -Wall -Wextra -pthread
 
-all: $(TARGET)
+SERVER = server
+CLIENT = client
 
-$(TARGET): eshop.o
-	$(CC) $(CFLAGS) -o $(TARGET) eshop.o
+SRV_SRC = server.c
+CLI_SRC = client.c
 
-eshop.o: eshop.c eshop.h
-	$(CC) $(CFLAGS) -c eshop.c
+all: $(SERVER) $(CLIENT)
+
+$(SERVER): $(SRV_SRC)
+	$(CC) $(CFLAGS) -o $(SERVER) $(SRV_SRC)
+
+$(CLIENT): $(CLI_SRC)
+	$(CC) $(CFLAGS) -o $(CLIENT) $(CLI_SRC)
+
+run-server:
+	./$(SERVER)
+
+run-clients:
+	./$(CLIENT) & ./$(CLIENT) & ./$(CLIENT) & ./$(CLIENT) & ./$(CLIENT) &
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f $(SERVER) $(CLIENT)
